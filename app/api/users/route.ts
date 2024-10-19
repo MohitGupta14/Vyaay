@@ -26,12 +26,13 @@ export async function GET(req: Request) {
 
 // Handle POST requests (Create a new user)
 export async function POST(req: Request) {
-  const { name, email } = await req.json();
+  const { name, email,password } = await req.json();
   try {
     const newUser = await prisma.user.create({
       data: {
         name,
         email,
+        password
       },
     });
     return NextResponse.json({ message: 'User created successfully', user: newUser }, { status: 201 });

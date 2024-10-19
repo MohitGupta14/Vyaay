@@ -11,26 +11,36 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String    @default("temporary_password")
-  createdAt DateTime @default(now())
-  groups    Group[]  @relation("GroupMembers")
-  splits    Split[]
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String    @unique
+  password    String    @default("temporary_password")
+  createdAt   DateTime  @default(now())
+  groups      Group[]   @relation("GroupMembers")
+  splits      Split[]
+  Admin       Group[]
 }
 
 model Group {
-  id         Int      @id @default(autoincrement())
-  groupName  String   @map("group_name")
-  members    User[]   @relation("GroupMembers")
-  createdAt  DateTime @default(now())
+  id             Int            @id @default(autoincrement())
+  groupName      String         @map("group_name")
+  members        User[]         @relation("GroupMembers")
+  transaction    Transaction[]
+  adminId        Int            @default(autoincrement())
+  Admin          User           @relation(fields: [adminId], references: [id])
+  createdAt      DateTime       @default(now())
 }
 
+//Create Group for the first time
+//Adding members in an existing group
+
 model Transaction {
-  id      Int    @id @default(autoincrement())
-  amount  Int
-  splits  Split[] @relation("TransactionSplits")
+  id           Int     @id @default(autoincrement())
+  groupId      Int
+  amount       Int
+  description  String  @map("description")
+  splits       Split[] @relation("TransactionSplits")
+  group        Group   @relation(fields: [groupId], references: [id])
 }
 
 model Split {
@@ -38,7 +48,7 @@ model Split {
   userId          Int
   user            User        @relation(fields: [userId], references: [id])
   shares          Int
-  paid           Boolean      @default(false)
+  paid            Boolean      @default(false)
   transactionId   Int
   transaction     Transaction @relation("TransactionSplits", fields: [transactionId], references: [id])
 }
