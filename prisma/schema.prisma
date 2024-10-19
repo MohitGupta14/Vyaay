@@ -21,24 +21,23 @@ model User {
 }
 
 model Group {
-  id         Int      @id @default(autoincrement())
-  groupName  String   @map("group_name")
-  members    User[]   @relation("GroupMembers")
-  createdAt  DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  groupName   String   @map("group_name")
+  members     User[]   @relation("GroupMembers")
+  transaction Transaction[]
+  createdAt   DateTime @default(now())
 }
 
-model Transaction {
-  id      Int    @id @default(autoincrement())
-  amount  Int
-  splits  Split[] @relation("TransactionSplits")
+model Transaction{
+  id        Int  @id @default(autoincrement())
+  amount    Float
+  split     Split[]
+  groupId   Group
 }
 
 model Split {
-  id              Int         @id @default(autoincrement())
-  userId          Int
-  user            User        @relation(fields: [userId], references: [id])
-  shares          Int
-  paid           Boolean      @default(false)
-  transactionId   Int
-  transaction     Transaction @relation("TransactionSplits", fields: [transactionId], references: [id])
+  id             Int   @id @default(autoincrement())
+  member         User
+  percentage     Float 
+  transacrionId  Transaction
 }
