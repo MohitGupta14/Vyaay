@@ -72,7 +72,7 @@ export async function GET(req: Request) {
       }
 
       const split = await prisma.split.findMany({
-        where: { transactionId: Number(transactionId) }, // Convert splitId to a number
+        where: { transactionId: Number(transactionId) }, 
         });
 
       if (!split) {
