@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request, res: NextResponse){
   try {
-    const { action, groupName, adminId, memberId, groupId } = await req.json();
+    const { action, groupName, adminId, memberId, description, groupId } = await req.json();
 
     if (action === 'createGroup') {
       // Validate the required field for creating a group
@@ -15,6 +15,7 @@ export async function POST(req: Request, res: NextResponse){
           data: {
             groupName,
             adminId,
+            description,
             members: {
                 connect: { id: adminId },
             },

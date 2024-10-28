@@ -14,16 +14,17 @@ export default async function DashboardPage() {
 
   return (
     <div className="bg-bgGreen min-h-screen flex bg-light-dots">
-    <Sidebar />
-    <div className="flex-1 p-5">
-      <div className="font-bold text-2xl mb-5"> {/* Added margin-bottom for spacing */}
-        <h1>Welcome {session.user.name}!!</h1>
-      </div>
-      <div className="flex justify-center items-center h-full -mt-12">
-        <CreateGroup />
+      <Sidebar />
+      <div className="flex-1 p-5">
+        <div className="font-bold text-2xl mb-5">
+          {" "}
+          {/* Added margin-bottom for spacing */}
+          <h1>Welcome {session.user.name}!!</h1>
+        </div>
+        <div className="flex justify-center items-center h-full -mt-12">
+        {session ? <CreateGroup session={session} /> : <div>Please log in to create a group.</div>}
+        </div>
       </div>
     </div>
-  </div>
-  
   );
 }
