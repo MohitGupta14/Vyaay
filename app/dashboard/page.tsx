@@ -14,7 +14,8 @@ export default async function DashboardPage() {
 
   return (
     <div className="bg-bgGreen min-h-screen flex bg-light-dots">
-      <Sidebar />
+      {session ? <Sidebar session={session} /> : <div>Please log in to create a group.</div>}
+
       <div className="flex-1 p-5">
         <div className="font-bold text-2xl mb-5">
           {" "}
