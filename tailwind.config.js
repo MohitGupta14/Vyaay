@@ -15,6 +15,7 @@ module.exports = {
           btnGreen : '#50B498',
           textGreen : '#508D4E',
           darkGreen : '#468585',
+          navbar : '#243642'
         },
         fontFamily: {
           lato: ['Lato', 'sans-serif'], // 'sans-serif' as fallback

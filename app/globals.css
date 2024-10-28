@@ -4,6 +4,27 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;1,400&display=swap');
 
+@keyframes borderAnimation {
+  0% {
+    border-color: darkgreen;
+    transform: translate(0);
+  }
+  50% {
+    border-color: lightgreen;
+    transform: translate(-5px, -5px);
+  }
+  100% {
+    border-color: darkgreen;
+    transform: translate(0);
+  }
+}
+
+.animated-border {
+  border: 4px solid darkgreen; /* Adjust thickness and color */
+  animation: borderAnimation 1.5s infinite;
+  border-radius: 8px; /* Adjust if you want rounded corners */
+}
+
 .bg-light-dots {
     background-image: radial-gradient(circle, rgba(193, 209, 20, 0.793) 20%, transparent 20%),
                       radial-gradient(circle, rgba(74, 85, 76, 0.2) 20%, transparent 20%);
