@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function POST(req: Request, res: Response){
+export async function POST(req: Request){
   
     const {amount, groupId, description} = await req.json();
 
@@ -23,7 +23,7 @@ export async function POST(req: Request, res: Response){
     }
 }
 
-export async function GET(req: Request, res: Response){
+export async function GET(req: Request){
     try {
         // Parse URL parameters instead of reading JSON for a GET request
         const { searchParams } = new URL(req.url);
