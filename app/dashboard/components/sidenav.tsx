@@ -40,7 +40,6 @@ export default function Sidebar({ session }: CreateGroupProps) {
         const response = await axios.get(`/api/groups?action=getGroupByUserId&userId=${session.user.id}`);
         setGroups(response.data); // Assuming the API returns an array of groups
       } catch (err) {
-        console.error(err);
         setError("Failed to fetch groups.");
       } finally {
         setLoading(false);

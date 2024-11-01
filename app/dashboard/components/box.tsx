@@ -18,7 +18,7 @@ interface CreateGroupProps {
 }
 
 
-export default function ({ session }: CreateGroupProps)  {
+export default function box({ session }: CreateGroupProps)  {
   console.log("sessions: " + JSON.stringify(session));
   const router = useRouter();
   const [step, setStep] = useState(1);

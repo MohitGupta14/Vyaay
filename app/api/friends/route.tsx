@@ -92,7 +92,7 @@ export async function GET(req: Request) {
         include: {
           friendships: {
             include : {
-              user : true
+              friend : true
             }
           },
         },
