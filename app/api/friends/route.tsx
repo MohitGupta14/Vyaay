@@ -48,33 +48,65 @@ export async function GET(req: Request) {
     const action = searchParams.get("action");
     const friendIdParam = searchParams.get("friendId");
     const friendId = friendIdParam ? parseInt(friendIdParam, 10) : null;
-
+    const userId =  searchParams.get("userId");
     // Validate the parameters
-    if (!friendId || action !== "getFriendById") {
+    if(action === "getFriendById"){
+      if (!friendId) {
+        return NextResponse.json(
+          { error: "Invalid parameters" },
+          { status: 400 }
+        );
+      }
+
+      // Find the friend by ID
+      const findFriends = await prisma.friendship.findUnique({
+        where: { id: friendId },
+        include: {
+          friend: true,
+        },
+      });
+
+      // If friend is not found, return a 404 error
+      if (!findFriends) {
+        return NextResponse.json({ error: "Friend not found" }, { status: 404 });
+      }
+
+      // Return the found friend
       return NextResponse.json(
-        { error: "Invalid parameters" },
-        { status: 400 }
+        { success: true, data: findFriends },
+        { status: 200 }
       );
     }
 
-    // Find the friend by ID
-    const findFriends = await prisma.friendship.findUnique({
-      where: { id: friendId },
-      include: {
-        friend: true,
-      },
-    });
+    if(action === "getFriendByUserId"){
 
-    // If friend is not found, return a 404 error
-    if (!findFriends) {
-      return NextResponse.json({ error: "Friend not found" }, { status: 404 });
+      if(!userId){
+        return NextResponse.json(
+          { error: "Invalid parameters" },
+          { status: 400 }
+        );
+      }
+
+      const findFriends = await prisma.user.findUnique({
+        where: { id: parseInt(userId)},
+        include: {
+          friendships: {
+            include : {
+              user : true
+            }
+          },
+        },
+      });
+
+      if (!findFriends) {
+        return NextResponse.json({ error: "Friend not found" }, { status: 404 });
+      }
+
+      return NextResponse.json(
+        { success: true, data: findFriends.friendships },
+        { status: 200 }
+      );
     }
-
-    // Return the found friend
-    return NextResponse.json(
-      { success: true, data: findFriends },
-      { status: 200 }
-    );
   } catch (error) {
     console.error("Error fetching friend:", error);
     return NextResponse.json(

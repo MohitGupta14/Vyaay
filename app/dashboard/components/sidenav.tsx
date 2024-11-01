@@ -1,11 +1,14 @@
 // app/components/Sidebar.tsx
 "use client"
+import { getFriendById } from "@/lib/features/friends/friendSlice";
+import { AppDispatch } from "@/lib/store";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 interface User {
-  id: string;
+  id: number;
   name: string;
   email : string
 }
@@ -22,6 +25,12 @@ export default function Sidebar({ session }: CreateGroupProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const dispatch: AppDispatch = useDispatch(); // Use the typed dispatch
+
+  useEffect(() => {
+      dispatch(getFriendById(session?.user?.id));
+  }, [dispatch, session.user.id]);
 
   useEffect(() => {
     const fetchGroups = async () => {
