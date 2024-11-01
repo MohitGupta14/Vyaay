@@ -55,7 +55,9 @@ export default function Sidebar({ session }: CreateGroupProps) {
         <Link href="/" className="text-white hover:bg-gray-700 p-2 font-bold text-4xl mb-6 rounded">
           𝘝𝘺𝘢𝘢𝘺
         </Link>
-
+        <Link href="/dashboard" className="text-white hover:bg-gray-700 p-2 rounded">
+          Dashboard
+        </Link>
         <div className="relative">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)} // Toggle dropdown
