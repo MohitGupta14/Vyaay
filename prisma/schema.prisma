@@ -11,45 +11,57 @@ datasource db {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   name        String
-  email       String    @unique
-  password    String    @default("temporary_password")
-  createdAt   DateTime  @default(now())
-  groups      Group[]   @relation("GroupMembers")
+  email       String       @unique
+  password    String       @default("temporary_password")
+  createdAt   DateTime     @default(now())
+  groups      Group[]      @relation("GroupMembers")
   splits      Split[]
   Admin       Group[]
+  friendships Friendship[] @relation("Friendships")
+  Friendship  Friendship[]
+}
+
+model Friendship {
+  id       Int  @id @default(autoincrement())
+  userId   Int
+  friendId Int
+  user     User @relation("Friendships", fields: [userId], references: [id])
+  friend   User @relation(fields: [friendId], references: [id])
+
+  @@unique([userId, friendId])
 }
 
 model Group {
-  id             Int            @id @default(autoincrement())
-  groupName      String         @map("group_name")
-  description    String         @default("description")
-  members        User[]         @relation("GroupMembers")
-  transaction    Transaction[]
-  adminId        Int            @default(autoincrement())
-  Admin          User           @relation(fields: [adminId], references: [id])
-  createdAt      DateTime       @default(now())
+  id          Int           @id @default(autoincrement())
+  groupName   String        @map("group_name")
+  description String        @default("description")
+  members     User[]        @relation("GroupMembers")
+  transaction Transaction[]
+  adminId     Int           @default(autoincrement())
+  Admin       User          @relation(fields: [adminId], references: [id])
+  createdAt   DateTime      @default(now())
 }
 
 //Create Group for the first time
 //Adding members in an existing group
 
 model Transaction {
-  id           Int     @id @default(autoincrement())
-  groupId      Int
-  amount       Int
-  description  String  @map("description")
-  splits       Split[] @relation("TransactionSplits")
-  group        Group   @relation(fields: [groupId], references: [id])
+  id          Int     @id @default(autoincrement())
+  groupId     Int
+  amount      Int
+  description String  @map("description")
+  splits      Split[] @relation("TransactionSplits")
+  group       Group   @relation(fields: [groupId], references: [id])
 }
 
 model Split {
-  id              Int         @id @default(autoincrement())
-  userId          Int
-  user            User        @relation(fields: [userId], references: [id])
-  shares          Int
-  paid            Boolean      @default(false)
-  transactionId   Int
-  transaction     Transaction @relation("TransactionSplits", fields: [transactionId], references: [id])
+  id            Int         @id @default(autoincrement())
+  userId        Int
+  user          User        @relation(fields: [userId], references: [id])
+  shares        Int
+  paid          Boolean     @default(false)
+  transactionId Int
+  transaction   Transaction @relation("TransactionSplits", fields: [transactionId], references: [id])
 }

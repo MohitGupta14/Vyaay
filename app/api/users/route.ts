@@ -12,13 +12,18 @@ export async function GET(req: Request) {
 
   if (id) {
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(id) }, // Find user by ID
+      include: {
+        friendships: {
+          // Include the friends relation
+          include: {
+            friend: true, // Include the friend data from the Friendship relation
+          },
+        },
+      },
     });
-    if (user) {
-      return NextResponse.json(user);
-    } else {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
-    }
+
+    return NextResponse.json(user);
   }
 
   const users = await prisma.user.findMany();
