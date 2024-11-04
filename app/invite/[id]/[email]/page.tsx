@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useParams, useRouter} from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import Box from "../../components/box";
 
 interface Params {
@@ -50,8 +51,12 @@ const InviteFriends = () => {
         userId: id,
         action: "addFriend",
       });
-      console.log(response.data);
-    } catch (error) {
+      if(response.status === 200){
+        toast.success(response.data.message)
+      }
+  
+    } catch (error : any) {
+      toast.error("something went wrong", error);
       console.error('Error inviting friend:', error);
     }
   };

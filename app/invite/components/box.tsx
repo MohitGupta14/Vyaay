@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 interface BoxProps {
     mail: string;
@@ -31,20 +32,23 @@ const Box: React.FC<BoxProps> = ({ mail, userId }) => {
     setError(null);
   
     try {
-      await axios.post(`/api/inviteFriends`, {
+      const response = await axios.post(`/api/inviteFriends`, {
         mail,
         userId,
         action: "addFriend",
         name,
         password,
       });
+
+      if(response.status === 200){
+        toast.success(response.data.message)
+      }
   
       // Redirect on success
       router.push('/login');
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setError("Failed to add friend. Please try again."); // Optionally set an error message
-    } finally {
+    } catch (error : any) {
+      toast.error("something went wrong", error);
+      setError("Failed to add friend. Please try again."); 
       setLoading(false);
     }
   };

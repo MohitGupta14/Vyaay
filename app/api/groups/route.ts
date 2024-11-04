@@ -38,7 +38,30 @@ export async function POST(req: Request) {
           { status: 400 }
         );
       }
-
+    
+      // Check if the member is already part of the group
+      const group = await prisma.group.findUnique({
+        where: { id: groupId },
+        include: { members: true }, // Include members in the result
+      });
+    
+      if (!group) {
+        return NextResponse.json(
+          { error: "Group not found" },
+          { status: 404 }
+        );
+      }
+    
+      // Check if the member is already in the group
+      const isMemberAlreadyAdded = group.members.some(member => member.id === memberId);
+      
+      if (isMemberAlreadyAdded) {
+        return NextResponse.json(
+          { error: "Member already in the group" },
+          { status: 409 } // Conflict
+        );
+      }
+    
       // Update the group by connecting the new member
       const updatedGroup = await prisma.group.update({
         where: { id: groupId },
@@ -48,9 +71,10 @@ export async function POST(req: Request) {
           },
         },
       });
-
+    
       return NextResponse.json(updatedGroup, { status: 200 });
     }
+    
 
     // If the action is not recognized, return a 400 Bad Request
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });

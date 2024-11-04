@@ -4,6 +4,7 @@ import addFriend from "@/app/utils/svg";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 
 export default function FetchFriends() {
@@ -17,13 +18,28 @@ export default function FetchFriends() {
   const { id } = useParams() as { id: string };
 
   const handleAddFriendsInGroup = async (memberId: number) => {
-    await axios.post(`/api/groups`, {
-      action: "addMember",
-      groupId: parseInt(id),
-      memberId: memberId,
-    });
+    try {
+      const response = await axios.post(`/api/groups`, {
+        action: "addMember",
+        groupId: parseInt(id),
+        memberId: memberId,
+      });
+  
+      if(response.status === 200){
+        toast.success('Successfully added in the group!')
+      }else{
+        toast.error(response.data.error);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error('Error adding member:', error.response?.data || error.message);
+      } else {
+        toast.error('Unexpected error:');
+        alert('An unexpected error occurred while adding the member.');
+      }
+    }
   };
-
+  
   return (
     <div className="absolute top-5 right-5 p-6 ">
       <button
@@ -35,7 +51,7 @@ export default function FetchFriends() {
       </button>
       <div
         className={`absolute left-0 w-full mt-5 bg-white text-black rounded shadow-lg transition-all duration-300 ease-in-out ${
-          isDropdownOpen ? "max-h-60 overflow-hidden" : "max-h-0"
+          isDropdownOpen ? "max-h-60 overflow-auto	" : "max-h-0"
         }`}
         style={{ transition: "max-height 0.3s ease-in-out" }}
       >
@@ -44,13 +60,13 @@ export default function FetchFriends() {
             {friends.map((friend: any) =>
               friend.data.map((fri: any) => {
                 return (
-                  <p
-                    key={fri.friend.id}
-                    className="block p-2 hover:bg-gray-200"
-                    onClick={() => handleAddFriendsInGroup(fri.friend.id)} // Call API on click
-                  >
+                  <button
+                  key={fri.friend.id}
+                  className="w-full text-left p-2 hover:bg-gray-200 focus:outline-none" // Ensure full width and remove outline on focus
+                  onClick={() => handleAddFriendsInGroup(fri.friend.id)} // Call API on click
+                >
                     {fri.friend.name}
-                  </p>
+                  </button>
                 );
               })
             )}
