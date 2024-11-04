@@ -9,6 +9,7 @@ const prisma = new PrismaClient();
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
+  const email = searchParams.get("email");
 
   if (id) {
     const user = await prisma.user.findUnique({
@@ -16,6 +17,21 @@ export async function GET(req: Request) {
       include: {
         friendships: {
           // Include the friends relation
+          include: {
+            friend: true, // Include the friend data from the Friendship relation
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(user);
+  }
+
+  if(email){
+    const user = await prisma.user.findUnique({
+      where: { email: email }, // Find user by ID
+      include: {
+        friendships: {
           include: {
             friend: true, // Include the friend data from the Friendship relation
           },
