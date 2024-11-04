@@ -32,7 +32,7 @@ export default function FetchFriends() {
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        toast.error('Error adding member:', error.response?.data || error.message);
+        toast.error('Already present in the group!!');
       } else {
         toast.error('Unexpected error:');
         alert('An unexpected error occurred while adding the member.');

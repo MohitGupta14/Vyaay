@@ -22,16 +22,20 @@ export async function POST(req: Request) {
       await transporter.sendMail({
         from: '"Mohit Gupta 👻" <Vyaay@gmail.com>',
         to: mail,
-        subject: `Hello ✔ ${userId}`,
-        text: "Hello world?",
-        html: "<b>Hello world?</b>",
+        subject: `Join Me on Vyaay!`,
+        text: `Hi, I'd love for you to join me on Vyaay, a great platform for connecting and sharing. Sign up here: ${process.env.VYAAY_REGISTRATION_LINK}. Looking forward to seeing you there!`,
+        html: `
+          <p>Hi,</p>
+          <p>I'd love for you to join me on Vyaay, a great platform for connecting and sharing.</p>
+          <p>Sign up here: <a href="${process.env.NEXTAUTH_URL}/invite/${userId}/${mail}">Link</a>.</p>
+          <p>Looking forward to seeing you there!</p>
+        `,
       });
-
-      return NextResponse.json({ message: "Email sent successfully" });
+  
+      return NextResponse.json({ message: "Email sent successfully",status : 200 });
     }
 
     if (action === "addFriend") {
-        console.log(mail)
       let findUser = await prisma.user.findUnique({
         where: { email: mail },
       });

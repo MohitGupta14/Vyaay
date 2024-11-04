@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import Sidebar from "../dashboard/components/sidenav";
 import FetchFriends from "./components/fetchFriends";
 import addFriend from "../utils/svg";
+import Mail from "./components/mail";
 
 export default async function friend() {
   const session = await getServerSession(options);
@@ -26,13 +27,8 @@ export default async function friend() {
           {" "}
           {/* Added margin-bottom for spacing */}
           <h1>Welcome {session.user.name}!!</h1>
-          <div className="absolute top-5 right-6 m-10 p-4">
-            <button
-              className="bg-btnGreen text-white rounded-full p-2 hover:bg-navbar transition"
-              aria-label="Add Friend"
-            >
-              {addFriend}{" "}
-            </button>
+          <div className="absolute top-40 right-6 m-10 p-4">
+            <Mail userId={session.user.id}/>
           </div>
       </div>
         <div className="p-5"> <FetchFriends /></div>
