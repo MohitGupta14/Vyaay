@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import addFriend from "@/app/utils/svg";
@@ -16,7 +15,6 @@ interface InviteResponse {
 }
 
 export default function Mail({ userId }: { userId: number }) {
-  const [showForm, setShowForm] = useState(false); // State to control form visibility
 
   const inviteFriends = async (mail: string): Promise<InviteResponse | undefined> => {
     try {

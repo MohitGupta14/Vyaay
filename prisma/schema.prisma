@@ -21,6 +21,7 @@ model User {
   Admin       Group[]
   friendships Friendship[] @relation("Friendships")
   Friendship  Friendship[]
+  Transaction Transaction[] @relation("Transaction")
 }
 
 model Friendship {
@@ -51,6 +52,8 @@ model Transaction {
   id          Int     @id @default(autoincrement())
   groupId     Int
   amount      Int
+  paidByid    Int
+  paidBy      User    @relation("Transaction", fields: [paidByid], references: [id])
   description String  @map("description")
   splits      Split[] @relation("TransactionSplits")
   group       Group   @relation(fields: [groupId], references: [id])
