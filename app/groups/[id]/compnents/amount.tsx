@@ -7,8 +7,6 @@ export default function Amount() {
     const [amount, setAmount] = useState(0);
     const [handleClick, setHandleClick] = useState(false);
 
-   
-
     const addAmount = () => {
         // Set handleClick to true to trigger a re-render
         setHandleClick(true);
@@ -17,7 +15,7 @@ export default function Amount() {
     return (
         <div className="flex justify-center p-4">
             {/* Conditionally render content based on handleClick */}
-            {!handleClick ? (
+            {handleClick ? (
                 <Members />
             ) : (
                 // Render a different component or content before the state change
