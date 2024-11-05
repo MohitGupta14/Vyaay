@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import Sidebar from "../../dashboard/components/sidenav";
 import FetchFriends from "./compnents/fetchFriends";
+import Amount from "./compnents/amount";
 
 export default async function groups() {
   
@@ -25,6 +26,9 @@ export default async function groups() {
           {" "}
           {/* Added margin-bottom for spacing */}
           <h1>Welcome {session?.user?.name} </h1>
+        </div>
+        <div>
+          <Amount />
         </div>
         <div className="absolute top-5 right-5 p-6 ">
          <FetchFriends/>

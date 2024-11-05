@@ -136,6 +136,7 @@ export async function GET(req: Request) {
 
       return NextResponse.json(groups, { status: 200 });
     }
+
   } catch (error) {
     console.error("Error handling request:", error);
     return NextResponse.json(

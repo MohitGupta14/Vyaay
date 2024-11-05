@@ -1,11 +1,13 @@
 "use client";
 
 import addFriend from "@/app/utils/svg";
+import { fetchMembers } from "@/lib/features/groupMembers/memberSlice";
+import { AppDispatch } from "@/lib/store";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function FetchFriends() {
   const friends = useSelector((state: any) => state.friends.friends); // Directly access friends
@@ -16,6 +18,12 @@ export default function FetchFriends() {
   };
 
   const { id } = useParams() as { id: string };
+
+  const dispatch: AppDispatch = useDispatch(); // Use the typed dispatch
+
+  useEffect(() => {
+      dispatch(fetchMembers(parseInt(id)));
+  }, [dispatch]);
 
   const handleAddFriendsInGroup = async (memberId: number) => {
     try {
