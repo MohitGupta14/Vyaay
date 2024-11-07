@@ -12,28 +12,33 @@ export default async function groups() {
   if (!session) {
     redirect("/login");
   }
-  
+
   return (
     <div className="bg-bgGreen min-h-screen flex bg-light-dots">
+      {/* Sidebar visible only if the user is logged in */}
       {session ? (
         <Sidebar session={session} />
       ) : (
-        <div>Please log in to create a group.</div>
+        <div className="flex justify-center items-center w-full">
+          <div>Please log in to create a group.</div>
+        </div>
       )}
 
-      <div className="flex-1 p-5">
-        <div className="font-bold text-2xl mb-5">
-          {" "}
-          {/* Added margin-bottom for spacing */}
-          <h1>Welcome {session?.user?.name} </h1>
-        </div>
-        <div>
+      {/* Main content area */}
+      <div className="min-h-screen flex-grow flex flex-col justify-center items-center relative w-full">
+        {/* Heading */}
+        {/* <h1 className="text-2xl font-semibold  mb-6 p-8">Group Split</h1> */}
+
+        {/* Amount component centered */}
+        <div className="flex justify-center items-center flex-grow w-full">
           <Amount />
         </div>
-        <div className="absolute top-5 right-5 p-6 ">
-         <FetchFriends/>
+
+        {/* Fixed FetchFriends in top-right corner */}
+        <div className="absolute top-5 right-5 p-6">
+          <FetchFriends />
         </div>
       </div>
     </div>
   );
-}
+} 
