@@ -3,26 +3,33 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function POST(req: Request){
-  
-    const {amount, groupId, description} = await req.json();
-
+export async function POST(req: Request) {
+    // Parse the request body
+    const { amount, groupId, description, paidByid } = await req.json();
+   
     try {
+        // Create the transaction and associate with existing group and user
         const createTransaction = await prisma.transaction.create({
-            data : {
+            data: {
                 amount,
-                groupId,
-                description
+                description,
+                group: {
+                    connect: { id: groupId },  
+                },
+                paidBy: {
+                    connect: { id: paidByid }, 
+                },
             }
-       })
+        });
 
-       return NextResponse.json(createTransaction);
-    } catch (error) {
+        // Return the created transaction as a JSON response
+        return NextResponse.json(createTransaction);
+    } catch (error: any) {
+        // Log the error (optional) and send a response with error details
         console.error('Error creating Transaction:', error);
-        return NextResponse.json({ error: 'Internal Server Error' });
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
-
 export async function GET(req: Request){
     try {
         // Parse URL parameters instead of reading JSON for a GET request

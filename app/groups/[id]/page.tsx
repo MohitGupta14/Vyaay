@@ -31,7 +31,7 @@ export default async function groups() {
 
         {/* Amount component centered */}
         <div className="flex justify-center items-center flex-grow w-full">
-          <Amount />
+          <Amount session={session as any} />
         </div>
 
         {/* Fixed FetchFriends in top-right corner */}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Members from "./components/members";
 
-export default function Amount() {
+export default function Amount({ session }: { session: any }) {
     const [amount, setAmount] = useState("");
     const [handleClick, setHandleClick] = useState(false);
 
@@ -16,7 +16,7 @@ export default function Amount() {
         <div className="flex justify-center items-center w-1/3">
             {/* Conditionally render content based on handleClick */}
             {handleClick ? (
-                <Members amount = {parseInt(amount)} />
+                <Members amount={parseInt(amount)} setHandleClick={setHandleClick} session = {session} />
             ) : (
                 // Render a different component or content before the state change
                 <div className="w-full">
