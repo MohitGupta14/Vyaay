@@ -71,7 +71,7 @@ const Members: React.FC<MembersProps> = ({
       });
   
       // Create splits directly using map() for better readability
-      const splits = Object.entries(percentages).map(([userIdStr, shares]) => {
+       const splits = Object.entries(percentages).map(([userIdStr, shares]) => {
         const userId = parseInt(userIdStr);  // Convert userId from string to number
         return {
           userId,
@@ -97,7 +97,6 @@ const Members: React.FC<MembersProps> = ({
 
   const handleEqSplit = async () => {
     try {
-
       const response = await axios.post("/api/transactions", {
         amount,
         groupId: parseInt(id),
@@ -106,7 +105,7 @@ const Members: React.FC<MembersProps> = ({
       });
 
       let splits: Array<{ userId: number; shares: number; transactionId: number }> = [];
-     
+
       for (let i = 0; i < members.length; i++) {
         splits.push({
           userId: members[i].id, // Assuming users is a string that can be converted to a number
@@ -145,8 +144,7 @@ const Members: React.FC<MembersProps> = ({
               />
             </div>
           ))}
-        </div>
-        <div className="flex">
+             <div className="flex">
           <div className="mt-6 p-2 flex justify-left">
             <button
               type="button"
@@ -175,6 +173,8 @@ const Members: React.FC<MembersProps> = ({
             </button>
           </div>
         </div>
+        </div>
+     
       </form>
     </div>
   );

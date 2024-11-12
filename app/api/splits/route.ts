@@ -100,6 +100,13 @@ export async function GET(req: Request) {
 
       const split = await prisma.split.findMany({
         where: { transactionId: Number(transactionId) },
+        include : {
+          user : {
+            select : {
+              name : true
+            }
+          }
+        }
       });
 
       if (!split) {
@@ -108,6 +115,19 @@ export async function GET(req: Request) {
 
       // Return the found split
       return NextResponse.json(split, { status: 200 });
+    }
+
+    if(action == "getSplitByUserAndTransactionId"){
+      const {userId, groupId} = await req.json();
+
+      const findSplits =  await prisma.split.findMany({
+        where: {
+          userId : userId,
+          transaction : {groupId : groupId}
+        }
+      });
+
+      return NextResponse.json(findSplits, {status: 200});
     }
   } catch (error) {
     console.error("Error fetching split:", error);

@@ -47,6 +47,9 @@ export async function GET(req: Request){
             // Attempt to find the group by ID
             const transaction = await prisma.transaction.findUnique({
             where: { id: Number(tranactionId) }, 
+                include :{
+                    splits : true
+                }
             });
         
             if (!transaction) {
@@ -64,8 +67,12 @@ export async function GET(req: Request){
             const transactions = await prisma.transaction.findMany({
                 where: { groupId: Number(groupId) }, // Ensure groupId is a number
                 include: {
-                    splits: true, // Include related splits if needed
-                    group: true,  // Optionally include the group details
+                    paidBy : {
+                        select : {
+                            name : true
+                        }
+                    },
+                    splits: true, 
                 },
                 });
         
