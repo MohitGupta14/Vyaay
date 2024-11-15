@@ -25,6 +25,10 @@ const ViewSettelments: React.FC<{ id: number }> = ({ id }) => {
   if (error) {
     return <div>Error loading splits: {error}</div>;
   }
+  
+  const handleSettelment =() => {
+     
+  };
 
   // Render splits table
   return (

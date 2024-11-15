@@ -137,3 +137,42 @@ export async function GET(req: Request) {
     );
   }
 }
+
+export async function PATCH(req: Request, res: Response) {
+  try {
+
+    const { userId, id ,action } = await req.json();
+
+    if (action === "settled") {
+      const split = await prisma.split.findUniqueOrThrow({
+        where: {
+          id : id,
+        },
+      });
+
+      if (!split) {
+        return NextResponse.json({ message: 'Split not found' }, { status: 404 });
+      }
+
+      if (split.userId === userId) {
+        const updatedSplit = await prisma.split.update({
+          where: {
+            id: id,
+          },
+          data: {
+            paid: true,
+          },
+        });
+
+        return NextResponse.json(updatedSplit, { status: 200 });
+      } else {
+        return NextResponse.json({ message: 'User ID does not match' }, { status: 403 });
+      }
+    } else {
+      return NextResponse.json({ message: 'Invalid method' }, { status: 400 });
+    }
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ message: 'Internal server error' }, { status: 400 });
+  }
+}
