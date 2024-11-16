@@ -66,7 +66,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const action = searchParams.get("action");
     const splitId = searchParams.get("splitId");
-    const transactionId = searchParams.get("transactionId");
+    const transactionId = searchParams.get("transactionId");    
     // Validate the action and splitId
     if (action == "getSplitById") {
       if (!splitId) {
@@ -164,7 +164,7 @@ export async function PATCH(req: Request, res: Response) {
           },
         });
 
-        return NextResponse.json(updatedSplit, { status: 200 });
+        return NextResponse.json({  message: "settlement done" }, { status: 200 });
       } else {
         return NextResponse.json({ message: 'User ID does not match' }, { status: 403 });
       }
