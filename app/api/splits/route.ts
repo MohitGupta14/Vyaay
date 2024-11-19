@@ -140,7 +140,7 @@ export async function GET(req: Request) {
   }
 }
 
-export async function PATCH(req: Request, res: Response) {
+export async function PATCH(req: Request) {
   try {
 
     const { userId, id ,action } = await req.json();
