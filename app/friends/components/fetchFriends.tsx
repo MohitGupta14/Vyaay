@@ -22,7 +22,7 @@ export default function FetchFriends() {
   return (
     <div className="m-4 p-4 bg-white rounded-lg shadow-md w-8/12">
       <h2 className="text-xl font-semibold mb-4">Friends List</h2>
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-4 overflow-auto h-[75vh]">
         {displayedFriends.length > 0 ? (
           displayedFriends.map((friend: any) => (
             <p key={friend.id} className="block p-2 border-b hover:bg-gray-200 transition duration-200">

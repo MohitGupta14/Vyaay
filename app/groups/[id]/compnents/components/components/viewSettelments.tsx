@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { fetchSplits } from "@/lib/features/splits/splitSlice";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { BeatLoading } from "respinner";
 
 const ViewSettelments: React.FC<{ id: number }> = ({ id }) => {
   const dispatch: AppDispatch = useDispatch();
@@ -32,7 +33,10 @@ const ViewSettelments: React.FC<{ id: number }> = ({ id }) => {
 
   // Handle loading and error states
   if (status == "loading") {
-    return <div>Loading...</div>;
+    return (
+    <div className="flex items-center justify-center ">
+    <BeatLoading size={10} fill="bg-btnGreen" count={4} /> 
+  </div>)
   }
 
   if (error) {
@@ -81,7 +85,7 @@ const ViewSettelments: React.FC<{ id: number }> = ({ id }) => {
               <th className="py-3 px-4 text-left ">Index</th>
               <th className="py-3 px-4 text-left">User ID</th>
               <th className="py-3 px-4 text-left">Shares</th>
-              <th className="py-3 px-4 text-left">Paid</th>
+              <th className="py-3 px- text-left">Paid</th>
             </tr>
           </thead>
           <tbody className="text-gray-900">

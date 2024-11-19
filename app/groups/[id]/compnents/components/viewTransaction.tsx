@@ -25,7 +25,7 @@ const ViewTransaction = () => {
 
   return (
     <div className="flex  items-center justify-center">
-      <div className="overflow-x-auto w-full max-w-7xl">
+      <div className="w-full max-w-7xl overflow-auto h-[75vh]">
         {status !== "succeeded" ? (
           // Show loading state
           <table className="min-w-full bg-white shadow-md rounded-xl">
@@ -49,7 +49,7 @@ const ViewTransaction = () => {
         ) : (
           // Render transactions if available
           <table className="min-w-full bg-white shadow-md rounded-xl">
-            <thead>
+            <thead className="sticky top-0">
               <tr className="bg-gray-100 text-gray-700">
                 <th className="py-3 px-6 text-left">Index</th>
                 <th className="py-3 px-6 text-left">Paid By</th>

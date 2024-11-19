@@ -28,7 +28,7 @@ export default async function groups() {
       <div className="min-h-screen flex flex-col w-full">
         {/* Centered Amount component */}
         <div className="flex mt-4 justify-center items-center flex-grow overflow-auto">
-          <div className="w-full max-w-4xl overflow-auto h-[75vh]">
+          <div className="w-full max-w-4xl">
             <Transactions />
           </div>
         </div>

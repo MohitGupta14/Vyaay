@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import ViewTransaction from "./components/viewTransaction";
+import { BeatLoading, SpinLoading} from 'respinner'
 
 const Transactions = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -22,8 +23,13 @@ const Transactions = () => {
   }, [dispatch, id]);
 
   if (loading) {
-    return <div>Loading...</div>; // Display loading indicator while fetching
+    return (
+      <div className="flex items-center justify-center min-h-screen ">
+        <BeatLoading size={10} fill="bg-btnGreen" count={4} /> 
+      </div>
+    );
   }
+  
 
   return (
     <div className="items-center justify-center">

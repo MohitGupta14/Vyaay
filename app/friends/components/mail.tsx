@@ -37,8 +37,9 @@ export default function Mail({ userId }: { userId: number }) {
 
   const handleButtonClick = async () => {
     const email = prompt("Enter the email address to send the invite:");
-
+ 
     if (email) {
+      toast.success("Email sent successfully");
       await inviteFriends(email); // Send the invite with the entered email
     }
   };
