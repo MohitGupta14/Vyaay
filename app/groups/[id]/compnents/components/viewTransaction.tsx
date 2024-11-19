@@ -24,7 +24,7 @@ const ViewTransaction = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="flex  items-center justify-center">
       <div className="overflow-x-auto w-full max-w-7xl">
         {status !== "succeeded" ? (
           // Show loading state
@@ -51,22 +51,22 @@ const ViewTransaction = () => {
           <table className="min-w-full bg-white shadow-md rounded-xl">
             <thead>
               <tr className="bg-gray-100 text-gray-700">
-                <th className="py-3 px-4 text-left">Index</th>
-                <th className="py-3 px-4 text-left">User</th>
-                <th className="py-3 px-4 text-left">Amount</th>
-                <th className="py-3 px-4 text-left">Description</th>
-                <th className="py-3 px-4 text-left">Settlement</th>
+                <th className="py-3 px-6 text-left">Index</th>
+                <th className="py-3 px-6 text-left">Paid By</th>
+                <th className="py-3 px-6 text-left">Amount</th>
+                <th className="py-3 px-6 text-left">Description</th>
+                <th className="py-3 px-6 text-left">Settlement</th>
               </tr>
             </thead>
             <tbody className="text-gray-900">
               {transactions && transactions.length > 0 ? (
                 transactions.map((transaction: any, index: number) => (
                   <tr key={transaction.id} className="border-b border-gray-200">
-                    <td className="px-4 py-2">{index + 1}</td>
-                    <td className="px-4 py-2">{transaction.paidBy.name}</td>
-                    <td className="px-4 py-2">{transaction.amount}</td>
-                    <td className="px-4 py-2">{transaction.description}</td>
-                    <td className="px-4 py-2">
+                    <td className="px-6 py-2">{index + 1}</td>
+                    <td className="px-6 py-2">{transaction.paidBy.name}</td>
+                    <td className="px-6 py-2">{transaction.amount}</td>
+                    <td className="px-6 py-2">{transaction.description}</td>
+                    <td className="px-6 py-2">
                       <button
                         className="bg-btnGreen p-3 rounded-lg text-white"
                         onClick={() => handleSettleClick(transaction.id)} // Pass transaction.id to the handler

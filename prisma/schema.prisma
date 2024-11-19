@@ -63,7 +63,7 @@ model Split {
   id            Int         @id @default(autoincrement())
   userId        Int
   user          User        @relation(fields: [userId], references: [id])
-  shares        Int
+  shares        Float
   paid          Boolean     @default(false)
   transactionId Int
   transaction   Transaction @relation("TransactionSplits", fields: [transactionId], references: [id])

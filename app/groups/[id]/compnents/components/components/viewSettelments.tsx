@@ -15,7 +15,6 @@ const ViewSettelments: React.FC<{ id: number }> = ({ id }) => {
     (state: RootState) => state.splits
   );
 
-
   useEffect(() => {
     if (id) {
       dispatch(fetchSplits(id)); 
@@ -79,7 +78,7 @@ const ViewSettelments: React.FC<{ id: number }> = ({ id }) => {
         <table className="min-w-full bg-white shadow-md rounded-xl">
           <thead>
             <tr className="bg-gray-100 text-gray-700">
-              <th className="py-3 px-4 text-left">Index</th>
+              <th className="py-3 px-4 text-left ">Index</th>
               <th className="py-3 px-4 text-left">User ID</th>
               <th className="py-3 px-4 text-left">Shares</th>
               <th className="py-3 px-4 text-left">Paid</th>

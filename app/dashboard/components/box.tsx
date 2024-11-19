@@ -1,12 +1,13 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 interface User {
   id: string;
   name: string;
-  email : string
+  email: string;
 }
 
 interface Session {
@@ -17,13 +18,11 @@ interface CreateGroupProps {
   session: Session;
 }
 
-
-export default function Box({ session }: CreateGroupProps)  {
+export default function Box({ session }: CreateGroupProps) {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
-  const [image, setImage] = useState<File | null>(null);
   const [invitationLink, setInvitationLink] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,10 +33,8 @@ export default function Box({ session }: CreateGroupProps)  {
       setError("Group name is required.");
     } else if (step === 2 && !groupDescription) {
       setError("Group description is required.");
-    } else if (step === 3 && !image) {
-      setError("Image is required.");
     } else {
-      setStep((prev) => prev + 1);
+      setStep((prev) => prev + 1); // If we remove step 3, it will just move to submission directly
     }
   };
 
@@ -50,7 +47,7 @@ export default function Box({ session }: CreateGroupProps)  {
     e.preventDefault();
     setLoading(true);
     setError(null);
-  
+
     try {
       // Prepare the data object
       const data = {
@@ -60,63 +57,48 @@ export default function Box({ session }: CreateGroupProps)  {
         action: "createGroup",
         invitationLink,
       };
-  
-      // Optionally add the image file if it exists
-      if (image) {
-        const imageData = new FormData();
-        imageData.append("image", image);
-        
-        // Send the request with the image
-        await axios.post("/api/groups", { ...data, image: imageData });
-      } else {
-        // Send the request without the image
-        await axios.post("/api/groups", data);
-      }
-  
-      router.push("/dashboard"); // Redirect to the dashboard after successful submission
+
+      // Send the request (without image)
+      await axios.post("/api/groups", data);
+      toast.success("Group created successfully");
+      router.push("/dashboard"); 
     } catch (error) {
       setError("An unexpected error occurred. Please try again.");
+      toast.error("An unexpected error occurred. Please try again."); 
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-10 w-1/2 ">
-      <h2 className="text-2xl font-bold text-center mb-6">Create Group</h2>
+    <div className="rounded-lg p-10 w-1/2">
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
       <form onSubmit={handleSubmit}>
+        {/* Step 1 - Group Name */}
         {step === 1 && (
-          <div className="mb-6">
-            <label
-              className="block text-gray-700 text-lg font-semibold mb-2"
-              htmlFor="groupName"
-            >
-              Group Name
-            </label>
+          <div className="mb-6 flex items-center space-x-4">
             <input
-              className="border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:border-darkGreen"
               id="groupName"
               value={groupName}
               onChange={(e) => setGroupName(e.target.value)}
+              placeholder="Enter the group name"
               required
+              className="border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-darkGreen focus:border-darkGreen transition duration-200 ease-in-out"
             />
             <button
               type="button"
-              className="mt-4 bg-btnGreen text-white font-semibold rounded-lg w-full py-3"
               onClick={handleNextStep}
+              className="bg-btnGreen text-white font-semibold rounded-lg w-1/4 py-3 hover:bg-darkGreen focus:outline-none focus:ring-2 focus:ring-darkGreen focus:ring-opacity-50 transition duration-200 ease-in-out"
             >
               Next
             </button>
           </div>
         )}
 
+        {/* Step 2 - Group Description */}
         {step === 2 && (
           <div className="mb-6">
-            {" "}
-            {/* Increased margin bottom */}
             <label
               className="block text-gray-700 text-lg font-semibold mb-2"
               htmlFor="groupDescription"
@@ -129,44 +111,6 @@ export default function Box({ session }: CreateGroupProps)  {
               value={groupDescription}
               onChange={(e) => setGroupDescription(e.target.value)}
               required
-            />
-            <div className="flex justify-between mt-4">
-              <button
-                type="button"
-                className="bg-gray-500 text-white font-semibold rounded-lg px-4 py-3"
-                onClick={handlePrevStep}
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                className="bg-btnGreen text-white font-semibold rounded-lg px-4 py-3"
-                onClick={handleNextStep}
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
-
-        {step === 3 && (
-          <div className="mb-6">
-            {" "}
-            {/* Increased margin bottom */}
-            <label
-              className="block text-gray-700 text-lg font-semibold mb-2"
-              htmlFor="image"
-            >
-              Group Image
-            </label>
-            <input
-              type="file"
-              className="border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:border-darkGreen"
-              id="image"
-              onChange={(e) =>
-                setImage(e.target.files ? e.target.files[0] : null)
-              }
-              // required
             />
             <div className="flex justify-between mt-4">
               <button

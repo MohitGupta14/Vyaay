@@ -25,22 +25,21 @@ export default async function groups() {
       )}
 
       {/* Main content area */}
-      <div className="min-h-screen flex-grow flex flex-col w-full">
-        {/* Amount component centered */}
-        <div className="flex justify-center items-center m-8 flex-grow">
+      <div className="min-h-screen flex flex-col w-full">
+        {/* Centered Amount component */}
+        <div className="flex mt-4 justify-center items-center flex-grow overflow-auto">
+          <div className="w-full max-w-4xl overflow-auto h-[75vh]">
+            <Transactions />
+          </div>
+        </div>
+
+        <div className="flex mt-4 justify-center items-center flex-grow  ">
           <Amount session={session as any} />
         </div>
 
         {/* Fixed FetchFriends in top-right corner */}
         <div className="absolute top-5 right-5 p-6">
           <FetchFriends />
-        </div>
-
-        {/* Center Transactions in the middle of the screen */}
-        <div className="flex justify-center items-center flex-grow">
-          <div className="w-full max-w-4xl p-4">
-            <Transactions />
-          </div>
         </div>
       </div>
     </div>

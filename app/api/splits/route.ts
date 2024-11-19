@@ -36,6 +36,8 @@ export async function POST(req: Request) {
         );
       }
 
+      console.log(userId, shares, transactionId);
+
       // Create the split in the database
       const split = await prisma.split.create({
         data: {
