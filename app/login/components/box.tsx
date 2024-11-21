@@ -1,13 +1,17 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { toast } from 'react-hot-toast';
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 
 const LoginBox: React.FC = () => {
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -22,7 +26,7 @@ const LoginBox: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    const result = await signIn("credentials", {
+    const result = await signIn('credentials', {
       redirect: false,
       email,
       password,
@@ -30,63 +34,129 @@ const LoginBox: React.FC = () => {
     setLoading(false);
 
     if (result?.error) {
-      setError(result.error);
+      toast.error(result.error);
+      setError('Invalid email or password');
     } else {
-      router.push("dashboard");
+      router.push('dashboard');
     }
   };
 
   if (!mounted) return null;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-bgGreen border-darkGreen">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-96">
-        <h2 className="text-2xl font-bold text-center mb-6">Log In</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-semibold mb-2"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              className="border border-gray-300 rounded-lg w-full p-2 focus:outline-none focus:border-darkGreen"
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+    <div className="login-container relative flex items-center justify-center min-h-screen overflow-hidden">
+      {/* Lighter Gradient Background Animation */}
+      <motion.div 
+        className="absolute inset-0 bg-gradient-to-br from-[#F0FFDF] via-[#E6F5E0] to-[#D0F0C0] bg-size-200 animate-gradient"
+        initial={{ backgroundPosition: '0% 50%' }}
+        animate={{ 
+          backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      />
 
-          <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-semibold mb-2"
-              htmlFor="password"
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative z-10 bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md space-y-6 border border-[#468585]/30"
+      >
+        <motion.h2 
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-3xl font-bold text-center text-[#508D4E] mb-6"
+        >
+          Welcome Back
+        </motion.h2>
+
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+              role="alert"
             >
+              <span className="block sm:inline">{error}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <motion.div 
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <label className="block text-[#508D4E] text-sm font-semibold mb-2" htmlFor="email">
+              Email Address
+            </label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#468585]" size={20} />
+              <input
+                className="pl-10 border border-[#468585]/30 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#50B498] transition duration-300"
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <label className="block text-[#508D4E] text-sm font-semibold mb-2" htmlFor="password">
               Password
             </label>
-            <input
-              className="border border-gray-300 rounded-lg w-full p-2 focus:outline-none focus:border-darkGreen"
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#468585]" size={20} />
+              <input
+                className="pl-10 pr-10 border border-[#468585]/30 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-[#50B498] transition duration-300"
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#468585]"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </motion.div>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
             type="submit"
-            className="bg-btnGreen text-white font-semibold rounded-lg w-full py-2 hover:bg-blue-500 transition duration-200"
             disabled={loading}
+            style={{ backgroundColor: '#50B498' }}
+            className="text-white font-semibold rounded-lg w-full py-3 hover:opacity-90 transition duration-300 ease-in-out transform disabled:opacity-50 flex items-center justify-center space-x-2"
           >
-            {loading ? "Signing In..." : "Sign In"}
-          </button>
+            {loading ? (
+              <span className="animate-pulse">Signing In...</span>
+            ) : (
+              "Sign In"
+            )}
+          </motion.button>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

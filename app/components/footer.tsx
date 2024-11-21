@@ -52,12 +52,12 @@ const Footer: React.FC = () => {
                 },
                 { 
                   icon: FaLinkedin, 
-                  href: "https://linkedin.com/in/yourprofile",
+                  href: "https://www.linkedin.com/in/mohitgupta2121/",
                   aria: "LinkedIn"
                 },
                 { 
                   icon: FaTwitter, 
-                  href: "https://twitter.com/yourhandle",
+                  href: "https://twitter.com/darkmohit001",
                   aria: "Twitter"
                 }
               ].map((social) => (

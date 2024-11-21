@@ -8,13 +8,21 @@ const Home = () => {
   
   return (
     <div className="bg-bgGreen min-h-screen flex flex-col">
-      {/* Navbar */}
-      <Navbar />
-      {/* Main Content */}
-        <LoginBox />
-      {/* Footer */}
-      <Footer />
+    {/* Navbar */}
+    <Navbar />
+    
+    {/* Main Content (LoginBox) */}
+    <div className="flex-grow justify-center items-center">
+      <LoginBox />
     </div>
+    
+    {/* Footer */}
+    
+    <Footer />
+  
+    
+  </div>
+  
   );
 };
 
