@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { sendWelcomeEmail } from "./utils/wlcmMail";
 
 const prisma = new PrismaClient();
 
@@ -27,7 +28,7 @@ export async function GET(req: Request) {
     return NextResponse.json(user);
   }
 
-  if(email){
+  if (email) {
     const user = await prisma.user.findUnique({
       where: { email: email }, // Find user by ID
       include: {
@@ -51,6 +52,21 @@ export async function POST(req: Request) {
   try {
     const { name, email, password } = await req.json();
 
+    // Check if a user already exists with the given email
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (existingUser) {
+      // If user already exists, throw an error
+      return NextResponse.json(
+        { message: "User already exists with this email" },
+        { status: 400 }
+      );
+    }
+
     // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -62,6 +78,9 @@ export async function POST(req: Request) {
         password: hashedPassword,
       },
     });
+
+    // Send the welcome email after creating the user
+    await sendWelcomeEmail(email, name);
 
     // Return a success response
     return NextResponse.json(
@@ -134,5 +153,28 @@ export async function DELETE(req: Request) {
       { message: "Error deleting user", error: error },
       { status: 400 }
     );
+  }
+}
+
+export async function PATCH(req: Request) {
+  const { action, email } = await req.json();
+
+  if (action === "verifyUser") {
+    const user = await prisma.user.findUnique({
+      where: { email: decodeURIComponent(email) },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    await prisma.user.update({
+      where: { email: decodeURIComponent(email) },
+      data: {
+        verified: true,
+      },
+    });
+
+    return NextResponse.json({ message: "User verified successfully" });
   }
 }

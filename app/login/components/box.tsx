@@ -1,13 +1,13 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+"use client";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const LoginBox: React.FC = () => {
   const router = useRouter();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -22,7 +22,7 @@ const LoginBox: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    const result = await signIn('credentials', {
+    const result = await signIn("credentials", {
       redirect: false,
       email,
       password,
@@ -30,9 +30,9 @@ const LoginBox: React.FC = () => {
     setLoading(false);
 
     if (result?.error) {
-      setError('Invalid email or password');
+      setError(result.error);
     } else {
-      router.push('dashboard')
+      router.push("dashboard");
     }
   };
 
@@ -45,7 +45,10 @@ const LoginBox: React.FC = () => {
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="email">
+            <label
+              className="block text-gray-700 text-sm font-semibold mb-2"
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -59,7 +62,10 @@ const LoginBox: React.FC = () => {
           </div>
 
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="password">
+            <label
+              className="block text-gray-700 text-sm font-semibold mb-2"
+              htmlFor="password"
+            >
               Password
             </label>
             <input
@@ -77,20 +83,9 @@ const LoginBox: React.FC = () => {
             className="bg-btnGreen text-white font-semibold rounded-lg w-full py-2 hover:bg-blue-500 transition duration-200"
             disabled={loading}
           >
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
-
-        <div className="mt-6 text-center">
-          <p className="text-gray-500">or</p>
-          <button
-            onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
-            className="bg-red-600 text-white font-semibold rounded-lg w-full py-2 hover:bg-red-500 transition duration-200 mt-4"
-            disabled={loading}
-          >
-            {loading ? 'Signing in with Google...' : 'Sign In with Google'}
-          </button>
-        </div>
       </div>
     </div>
   );

@@ -18,9 +18,9 @@ const ViewSettelments: React.FC<{ id: number }> = ({ id }) => {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchSplits(id)); 
+      dispatch(fetchSplits(id));
     }
-  }, [id, dispatch]); 
+  }, [id, dispatch]);
 
   useEffect(() => {
     splits.map((splits: any) => {
@@ -34,9 +34,10 @@ const ViewSettelments: React.FC<{ id: number }> = ({ id }) => {
   // Handle loading and error states
   if (status == "loading") {
     return (
-    <div className="flex items-center justify-center ">
-    <BeatLoading size={10} fill="bg-btnGreen" count={4} /> 
-  </div>)
+      <div className="flex items-center justify-center ">
+        <BeatLoading size={10} fill="bg-btnGreen" count={4} />
+      </div>
+    );
   }
 
   if (error) {

@@ -35,9 +35,6 @@ export async function POST(req: Request) {
           { status: 400 }
         );
       }
-
-      console.log(userId, shares, transactionId);
-
       // Create the split in the database
       const split = await prisma.split.create({
         data: {
@@ -68,7 +65,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const action = searchParams.get("action");
     const splitId = searchParams.get("splitId");
-    const transactionId = searchParams.get("transactionId");    
+    const transactionId = searchParams.get("transactionId");
     // Validate the action and splitId
     if (action == "getSplitById") {
       if (!splitId) {
@@ -102,13 +99,13 @@ export async function GET(req: Request) {
 
       const split = await prisma.split.findMany({
         where: { transactionId: Number(transactionId) },
-        include : {
-          user : {
-            select : {
-              name : true
-            }
-          }
-        }
+        include: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
       });
 
       if (!split) {
@@ -119,17 +116,17 @@ export async function GET(req: Request) {
       return NextResponse.json(split, { status: 200 });
     }
 
-    if(action == "getSplitByUserAndTransactionId"){
-      const {userId, groupId} = await req.json();
+    if (action == "getSplitByUserAndTransactionId") {
+      const { userId, groupId } = await req.json();
 
-      const findSplits =  await prisma.split.findMany({
+      const findSplits = await prisma.split.findMany({
         where: {
-          userId : userId,
-          transaction : {groupId : groupId}
-        }
+          userId: userId,
+          transaction: { groupId: groupId },
+        },
       });
 
-      return NextResponse.json(findSplits, {status: 200});
+      return NextResponse.json(findSplits, { status: 200 });
     }
   } catch (error) {
     console.error("Error fetching split:", error);
@@ -142,18 +139,20 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
-
-    const { userId, id ,action } = await req.json();
+    const { userId, id, action } = await req.json();
 
     if (action === "settled") {
       const split = await prisma.split.findUniqueOrThrow({
         where: {
-          id : id,
+          id: id,
         },
       });
 
       if (!split) {
-        return NextResponse.json({ message: 'Split not found' }, { status: 404 });
+        return NextResponse.json(
+          { message: "Split not found" },
+          { status: 404 }
+        );
       }
 
       if (split.userId === userId) {
@@ -166,15 +165,24 @@ export async function PATCH(req: Request) {
           },
         });
 
-        return NextResponse.json({  message: "settlement done" }, { status: 200 });
+        return NextResponse.json(
+          { message: "settlement done" },
+          { status: 200 }
+        );
       } else {
-        return NextResponse.json({ message: 'User ID does not match' }, { status: 403 });
+        return NextResponse.json(
+          { message: "User ID does not match" },
+          { status: 403 }
+        );
       }
     } else {
-      return NextResponse.json({ message: 'Invalid method' }, { status: 400 });
+      return NextResponse.json({ message: "Invalid method" }, { status: 400 });
     }
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ message: 'Internal server error' }, { status: 400 });
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 400 }
+    );
   }
 }

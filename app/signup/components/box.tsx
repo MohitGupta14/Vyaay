@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const SignupBox: React.FC = () => {
   const router = useRouter();
@@ -33,25 +34,13 @@ const SignupBox: React.FC = () => {
         password,
       });
 
+      toast.success("Account created! Verify your email and let's get started!");
+
     } catch (error) {
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
       router.push('/login')
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    if (!mounted) return;
-    setLoading(true);
-    setError(null);
-    try {
-      await signIn('google', { callbackUrl: '/' });
-    } catch (error) {
-      console.error('Google Sign-In Error:', error);
-      setError('Google sign-in failed. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 

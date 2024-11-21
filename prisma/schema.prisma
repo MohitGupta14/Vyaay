@@ -15,6 +15,7 @@ model User {
   name        String
   email       String       @unique
   password    String       @default("temporary_password")
+  verified    Boolean      @default(false)
   createdAt   DateTime     @default(now())
   groups      Group[]      @relation("GroupMembers")
   splits      Split[]

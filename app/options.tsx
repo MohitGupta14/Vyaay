@@ -1,5 +1,4 @@
 import axios from "axios";
-import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const options = {
@@ -27,15 +26,19 @@ export const options = {
           );
 
           // Check if the response contains user data
+          if (!response.data.verified) {
+            // toast.error("Email not verified");
+            throw new Error("Email not verified");
+          }
+
           if (response.data) {
             return response.data; // Return the user object
           } else {
             throw new Error("Invalid email or password");
           }
-        } catch (error) {
+        } catch (error: any) {
           // Log and throw the error
-          console.error("Error fetching user:", error);
-          throw new Error("Failed to fetch user data");
+          throw new Error(error.response.data.error);
         }
       },
     }),
