@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     if (!isPasswordValid) {
       throw new Error("Invalid email or password");
     }
-
+    
     if (!user.verified) {
       throw new Error("Email not verified. Please check your inbox.");
     }

@@ -18,8 +18,12 @@ module.exports = {
           navbar : '#243642'
         },
         fontFamily: {
-          lato: ['Lato', 'sans-serif'], // 'sans-serif' as fallback
+
+          lato: ['Funnel Display', 'Lato', 'sans-serif'], // 'sans-serif' as fallback
         },
+        backgroundImage: {
+          'gradient-footer': 'linear-gradient(to right, #064e3b, #065f46, #047857)',
+        }
     },
   },
   plugins: [],
