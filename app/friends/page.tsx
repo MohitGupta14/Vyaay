@@ -4,8 +4,6 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import Sidebar from "../dashboard/components/sidenav";
 import FetchFriends from "./components/fetchFriends";
-import addFriend from "../utils/svg";
-import Mail from "./components/mail";
 
 export default async function friend() {
   const session = await getServerSession(options);
@@ -22,16 +20,8 @@ export default async function friend() {
         <div>Please log in to create a group.</div>
       )}
 
-      <div className="flex-1 p-5">
-        <div className="font-bold text-3xl mb-5">
-          {" "}
-          {/* Added margin-bottom for spacing */}
-          <h1>Welcome {session.user.name}!!</h1>
-          <div className="absolute top-40 right-6 m-10 p-4">
-            <Mail userId={session.user.id}/>
-          </div>
-      </div>
-        <div className="p-5"> <FetchFriends /></div>
+      <div className="flex-1 p-8">
+        <div className=" justify-center items-center flex"> <FetchFriends  session={session}/></div>
       </div>
     </div>
   );
