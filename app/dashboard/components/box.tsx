@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Users } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface User {
   id: string;
@@ -34,7 +36,7 @@ export default function Box({ session }: CreateGroupProps) {
     } else if (step === 2 && !groupDescription) {
       setError("Group description is required.");
     } else {
-      setStep((prev) => prev + 1); // If we remove step 3, it will just move to submission directly
+      setStep((prev) => prev + 1);
     }
   };
 
@@ -49,7 +51,6 @@ export default function Box({ session }: CreateGroupProps) {
     setError(null);
 
     try {
-      // Prepare the data object
       const data = {
         groupName,
         description: groupDescription,
@@ -58,7 +59,6 @@ export default function Box({ session }: CreateGroupProps) {
         invitationLink,
       };
 
-      // Send the request (without image)
       await axios.post("/api/groups", data);
       toast.success("Group created successfully");
       router.push("/dashboard"); 
@@ -70,67 +70,137 @@ export default function Box({ session }: CreateGroupProps) {
     }
   };
 
+  const pageVariants = {
+    initial: { opacity: 0, scale: 0.9 },
+    in: { opacity: 1, scale: 1 },
+    out: { opacity: 0, scale: 1.1 }
+  };
+
+  const pageTransition = {
+    type: "tween",
+    ease: "anticipate",
+    duration: 0.5
+  };
+
   return (
-    <div className="rounded-lg p-10 w-1/2">
-      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+    <motion.div 
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={pageTransition}
+      className="bg-[#DEF9C4]  flex items-center justify-center  bg-opacity-100"
+    >
+      <motion.div 
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white shadow-2xl rounded-2xl w-full max-w-md md:max-w-lg lg:max-w-xl p-8 border border-[#50B498]/20"
+      >
+        <div className="flex items-center justify-center mb-6">
+          <Users className="w-12 h-12 text-[#50B498] mr-3" />
+          <h2 className="text-2xl md:text-3xl font-bold text-[#468585]">Create New Group</h2>
+        </div>
 
-      <form onSubmit={handleSubmit}>
-        {/* Step 1 - Group Name */}
-        {step === 1 && (
-          <div className="mb-6 flex items-center space-x-4">
-            <input
-              id="groupName"
-              value={groupName}
-              onChange={(e) => setGroupName(e.target.value)}
-              placeholder="Enter the group name"
-              required
-              className="border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-darkGreen focus:border-darkGreen transition duration-200 ease-in-out"
-            />
-            <button
-              type="button"
-              onClick={handleNextStep}
-              className="bg-btnGreen text-white font-semibold rounded-lg w-1/4 py-3 hover:bg-darkGreen focus:outline-none focus:ring-2 focus:ring-darkGreen focus:ring-opacity-50 transition duration-200 ease-in-out"
+        <AnimatePresence>
+          {error && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg mb-4 text-center"
             >
-              Next
-            </button>
-          </div>
-        )}
+              {error}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Step 2 - Group Description */}
-        {step === 2 && (
-          <div className="mb-6">
-            <label
-              className="block text-gray-700 text-lg font-semibold mb-2"
-              htmlFor="groupDescription"
-            >
-              Group Description
-            </label>
-            <textarea
-              className="border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:border-darkGreen"
-              id="groupDescription"
-              value={groupDescription}
-              onChange={(e) => setGroupDescription(e.target.value)}
-              required
-            />
-            <div className="flex justify-between mt-4">
-              <button
-                type="button"
-                className="bg-gray-500 text-white font-semibold rounded-lg px-4 py-3"
-                onClick={handlePrevStep}
+        <form onSubmit={handleSubmit}>
+          <AnimatePresence mode="wait">
+            {/* Step 1 - Group Name */}
+            {step === 1 && (
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, x: -100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 100 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-4"
               >
-                Back
-              </button>
-              <button
-                type="submit"
-                className="bg-btnGreen text-white font-semibold rounded-lg px-4 py-3"
-                disabled={loading}
+                <div>
+                  <label 
+                    htmlFor="groupName" 
+                    className="block text-[#508D4E] mb-2 font-semibold"
+                  >
+                    Group Name
+                  </label>
+                  <input
+                    id="groupName"
+                    value={groupName}
+                    onChange={(e) => setGroupName(e.target.value)}
+                    placeholder="Enter group name"
+                    required
+                    className="w-full p-3 border border-[#50B498]/50 rounded-lg focus:ring-2 focus:ring-[#50B498] transition-all duration-300"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleNextStep}
+                  className="w-full bg-[#50B498] text-white py-3 rounded-lg hover:bg-[#468585] transition-colors duration-300"
+                >
+                  Next
+                </button>
+              </motion.div>
+            )}
+
+            {/* Step 2 - Group Description */}
+            {step === 2 && (
+              <motion.div
+                key="step2"
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-4"
               >
-                {loading ? "Creating Group..." : "Create Group"}
-              </button>
-            </div>
-          </div>
-        )}
-      </form>
-    </div>
+                <div>
+                  <label 
+                    htmlFor="groupDescription" 
+                    className="block text-[#508D4E] mb-2 font-semibold"
+                  >
+                    Group Description
+                  </label>
+                  <textarea
+                    id="groupDescription"
+                    value={groupDescription}
+                    onChange={(e) => setGroupDescription(e.target.value)}
+                    placeholder="Describe your group"
+                    required
+                    rows={4}
+                    className="w-full p-3 border border-[#50B498]/50 rounded-lg focus:ring-2 focus:ring-[#50B498] transition-all duration-300"
+                  />
+                </div>
+                <div className="flex space-x-4">
+                  <button
+                    type="button"
+                    onClick={handlePrevStep}
+                    className="w-1/2 bg-gray-200 text-[#468585] py-3 rounded-lg hover:bg-gray-300 transition-colors"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-1/2 bg-[#50B498] text-white py-3 rounded-lg hover:bg-[#468585] transition-colors disabled:opacity-50"
+                  >
+                    {loading ? "Creating..." : "Create Group"}
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </form>
+      </motion.div>
+    </motion.div>
   );
 }
