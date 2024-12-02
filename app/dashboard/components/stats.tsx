@@ -18,7 +18,7 @@ interface CreateGroupProps {
   session: Session;
 }
 
-export default function ({ session }: CreateGroupProps) {
+export default function Stats({ session }: CreateGroupProps) {
   const [userData, setUserData] = useState({
     name: session.user.name,
     totalFriends: 120,
